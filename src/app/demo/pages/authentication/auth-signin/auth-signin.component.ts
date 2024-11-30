@@ -34,9 +34,19 @@ export default class AuthSigninComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.clearCacheIfNotAuthorize();
+
     this.cacheSubscription = this.cacheService.cache$.subscribe((data) => {
       this.data = data;
     });
+  }
+
+  public clearCacheIfNotAuthorize(): void {
+    const isTokenExpired = this.httpService.isTokenExpired();
+    if (isTokenExpired) {
+      console.log('expired');
+      this.httpService.clearCache();
+    }
   }
 
   getData(userId: number): void {

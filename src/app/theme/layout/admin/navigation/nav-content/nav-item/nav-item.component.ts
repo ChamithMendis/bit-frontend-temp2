@@ -22,8 +22,8 @@ export class NavItemComponent {
       const last_parent = up_parent.parentElement;
       const sections = document.querySelectorAll('.pcoded-hasmenu');
       for (let i = 0; i < sections.length; i++) {
-        sections[i].classList.remove('active');
-        sections[i].classList.remove('pcoded-trigger');
+        // sections[i].classList.remove('active');
+        // sections[i].classList.remove('pcoded-trigger');
       }
       if (parent.classList.contains('pcoded-hasmenu')) {
         parent.classList.add('pcoded-trigger');

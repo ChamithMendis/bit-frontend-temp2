@@ -4,11 +4,10 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class HttpService {
-  public userNameBehaviorSubject: BehaviorSubject<string> =
-    new BehaviorSubject<string>('');
+  public userNameBehaviorSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
   constructor(private http: HttpClient) {}
 
   getAuthToken(): string | null {
@@ -113,5 +112,20 @@ export class HttpService {
     }
 
     return this.http.put(requestUrl, data, { headers: headers }).toPromise();
+  }
+
+  public isTokenExpired() {
+    const token = window.localStorage.getItem('auth_token');
+
+    if (!token) {
+      return false;
+    }
+
+    const expiry = JSON.parse(atob(token.split('.')[1])).exp;
+    return Math.floor(new Date().getTime() / 1000) >= expiry;
+  }
+
+  public clearCache(): void {
+    this.removeToken();
   }
 }
