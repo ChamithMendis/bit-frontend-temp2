@@ -2,11 +2,27 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AdminComponent } from './theme/layout/admin/admin.component';
 import { GuestComponent } from './theme/layout/guest/guest.component';
+import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   {
     path: '',
+    children: [
+      {
+        path: '',
+        redirectTo: '/auth/signin',
+        pathMatch: 'full'
+      },
+      {
+        path: 'auth',
+        loadChildren: () => import('./demo/pages/authentication/authentication.module').then((m) => m.AuthenticationModule)
+      }
+    ]
+  },
+  {
+    path: '',
     component: AdminComponent,
+    canActivate: [AuthGuard],
     children: [
       {
         path: '',
@@ -40,16 +56,6 @@ const routes: Routes = [
       {
         path: 'privileges',
         loadChildren: () => import('./demo/pages/privileges/privileges.module').then((m) => m.PrivilegesModule)
-      }
-    ]
-  },
-  {
-    path: '',
-    component: GuestComponent,
-    children: [
-      {
-        path: 'auth',
-        loadChildren: () => import('./demo/pages/authentication/authentication.module').then((m) => m.AuthenticationModule)
       }
     ]
   }
